@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grammar Learning with Video</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Word display animation */
+    .fade-in {
+      opacity: 0;
+      transition: opacity 1s ease-in;
+    }
+    .fade-in.show {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body class="bg-gray-100">
+
+  <!-- Main container -->
+  <div class="container mx-auto p-6">
+    <h1 class="text-4xl text-center text-orange-500 font-bold mb-8">Grammar Learning with Video</h1>
+
+    <!-- Lesson Number Display -->
+    <h2 id="lessonDisplay" class="text-2xl text-center text-blue-500 mb-4">Lesson 01</h2>
+
+    <!-- Video Section -->
+    <div class="flex justify-center mb-6">
+      <video id="learningVideo" class="rounded-lg shadow-lg" width="640" controls>
+        <source src="video/Japanese Languag app.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </div>
+
+    <!-- Rule Display Area -->
+    <div id="ruleDisplay" class="text-2xl text-center text-gray-800 fade-in mb-6"></div>
+
+    <!-- Next Button -->
+    <div class="flex justify-center space-x-4">
+      <button onclick="nextRule()" class="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600">Next</button>
+    </div>
+  </div>
+
+  <!-- JavaScript for interactivity -->
+  <script>
+    const video = document.getElementById('learningVideo');
+    let currentRule = 0;
+    const lessonNumber = 1; // Set the lesson number
+
+    // Array of rules and their corresponding video times
+    const rules = [
+      { time: 5, text: `N1 は N2 です<br>(N1 wa N2 desu) - "N1 is N2"` },
+      { time: 10, text: `Note: Noun এর পর は (ha) বসলে, উচ্চারণ হবে は(wa)` },
+      { time: 15, text: `わたしは ミラーです。<br>Watashi wa Mira desu - "আমি হই মিরা"` },
+      { time: 20, text: `わたしは エンジニアです。<br>Watashi wa Enjinia desu - "আমি হই ইঞ্জিনিয়ার"` },
+      { time: 25, text: `N1 は N2 です গ্রামার To-be (হই/হয়) হিসেবে ব্যবহার হয়।` }
+    ];
+
+    // Function to display next rule and play corresponding video part
+    function nextRule() {
+      if (currentRule < rules.length) {
+        const ruleDisplay = document.getElementById('ruleDisplay');
+        const lessonDisplay = document.getElementById('lessonDisplay');
+        const rule = rules[currentRule];
+
+        ruleDisplay.classList.remove('show');  // Hide previous rule
+        setTimeout(() => {
+          ruleDisplay.innerHTML = rule.text;
+          ruleDisplay.classList.add('show');  // Show new rule with fade-in animation
+        }, 100);  // Short delay for reset
+
+        // Update Lesson Number (if applicable)
+        lessonDisplay.innerHTML = `Lesson ${lessonNumber}`;
+
+        // Play video from the corresponding time
+        video.currentTime = rule.time;
+        video.play();
+
+        currentRule++;  // Move to the next rule
+      } else {
+        alert("You've finished all the rules!");  // Alert after all rules are shown
+      }
+    }
+
+    // Automatically display the rule when the video reaches certain time
+    video.addEventListener('timeupdate', function() {
+      const currentTime = video.currentTime;
+
+      // Check the current video time and show the corresponding rule
+      rules.forEach((rule, index) => {
+        if (currentTime > rule.time && currentTime < rule.time + 5) {
+          document.getElementById('ruleDisplay').innerHTML = rule.text;
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
